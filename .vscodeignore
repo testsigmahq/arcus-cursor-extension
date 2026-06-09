@@ -1,0 +1,17 @@
+src/**
+tests/**
+docs/**
+.claude/**
+.cursor/**
+hooks/*.test.sh
+.gitignore
+.github/**
+.githooks/**
+node_modules/**
+esbuild.js
+tsconfig.json
+eslint.config.js
+.eslintrc*
+.env
+.env.*
+*.vsix

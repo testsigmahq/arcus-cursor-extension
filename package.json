@@ -1,0 +1,89 @@
+{
+  "name": "arcus",
+  "displayName": "Arcus",
+  "description": "Exploratory testing for your code changes. Track edits, generate test plans, run tests in the cloud or locally.",
+  "version": "0.1.0",
+  "publisher": "testsigma",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/testsigmahq/arcus-cursor-extension"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Testing",
+    "Other"
+  ],
+  "icon": "assets/icon.png",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "arcus.signIn",
+        "title": "Arcus: Sign In"
+      },
+      {
+        "command": "arcus.signOut",
+        "title": "Arcus: Sign Out"
+      }
+    ],
+    "configuration": {
+      "title": "Arcus",
+      "properties": {
+        "arcus.serverUrl": {
+          "type": "string",
+          "default": "https://tms-staging.testsigma.com",
+          "description": "Arcus agentic/auth server URL (browser sign-in, token exchange & refresh)"
+        },
+        "arcus.apiServerUrl": {
+          "type": "string",
+          "default": "https://agentic-test-staging.testsigma.com",
+          "description": "Arcus API server URL (receives hook/context events)"
+        },
+        "arcus.eventsPath": {
+          "type": "string",
+          "default": "/api/v1/plugin/events",
+          "description": "Path on the API server that accepts hook events"
+        },
+        "arcus.logLevel": {
+          "type": "string",
+          "enum": [
+            "off",
+            "error",
+            "info",
+            "debug"
+          ],
+          "default": "info",
+          "description": "Extension log level"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "node esbuild.js",
+    "build:prod": "NODE_ENV=production node esbuild.js",
+    "watch": "node esbuild.js --watch",
+    "package": "npm run build:prod && vsce package --no-dependencies",
+    "deploy": "npm version patch --no-git-tag-version && npm run package && cursor --install-extension arcus-$(node -p \"require('./package.json').version\").vsix",
+    "lint": "eslint src tests",
+    "test": "tsx --test 'tests/**/*.test.ts'",
+    "clean": "rm -rf dist *.vsix node_modules package-lock.json",
+    "startover": "npm run clean && npm install && npm run deploy",
+    "prepare": "git config core.hooksPath .githooks && chmod +x .githooks/*"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "@vscode/vsce": "^2.22.0",
+    "esbuild": "^0.19.0",
+    "eslint": "^9.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.3.0"
+  }
+}

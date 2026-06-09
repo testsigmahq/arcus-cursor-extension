@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "type": "command",
+        "command": "bash \"${workspaceFolder}/hooks/capture_hook.sh\"",
+        "timeout": 60
+      }
+    ],
+    "afterAgentResponse": [
+      {
+        "type": "command",
+        "command": "bash \"${workspaceFolder}/hooks/capture_hook.sh\"",
+        "timeout": 30
+      }
+    ],
+    "preToolUse": [
+      {
+        "type": "command",
+        "command": "bash \"${workspaceFolder}/hooks/capture_hook.sh\"",
+        "timeout": 60,
+        "matcher": "*"
+      }
+    ],
+    "postToolUse": [
+      {
+        "type": "command",
+        "command": "bash \"${workspaceFolder}/hooks/capture_hook.sh\"",
+        "timeout": 60,
+        "matcher": "*"
+      }
+    ],
+    "beforeSubmitPrompt": [
+      {
+        "type": "command",
+        "command": "bash \"${workspaceFolder}/hooks/capture_hook.sh\"",
+        "timeout": 60
+      }
+    ],
+    "stop": [
+      {
+        "type": "command",
+        "command": "bash \"${workspaceFolder}/hooks/capture_hook.sh\"",
+        "timeout": 30
+      }
+    ],
+    "sessionEnd": [
+      {
+        "type": "command",
+        "command": "bash \"${workspaceFolder}/hooks/capture_hook.sh\"",
+        "timeout": 10
+      }
+    ]
+  }
+}

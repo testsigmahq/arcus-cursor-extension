@@ -1,0 +1,33 @@
+# Build output — never commit
+dist/
+
+# Source maps — expose original source, never commit
+*.map
+**/*.map
+
+# Packaged extension
+*.vsix
+
+# Runtime session data
+.vibetest/
+
+# Design docs / plans — local only, not part of the repo
+docs/
+
+# Dependencies
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/settings.json
+.idea/
+
+# Local agent config (Claude Code) — personal, machine-specific
+.claude/
+
+# Env / secrets
+.env
+.env.*
