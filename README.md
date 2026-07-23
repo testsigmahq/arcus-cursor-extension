@@ -178,7 +178,13 @@ The extension provisions these commands into `~/.cursor/commands/` on activation
 | `/arcus-project use <id>` | Pin the active project |
 | `/arcus-project current` | Show the pinned project |
 | `/arcus-map ticket <KEY>` | Map a ticket to the current session's workflow |
+| `/arcus-test [feature]` | Author Testsigma-script (code-v2) e2e tests via the `testsigma` CLI, validate them, and offer to run them |
+| `/arcus-push` | Push the test cases authored this session into Agentic Test |
 | `/arcus-help` | Show command help |
+
+`/arcus-test` and `/arcus-push` drive the external `testsigma` CLI (must be on PATH;
+it has its own `testsigma login`). `/arcus-push` also preflights the pinned project
+through the bundled Node CLI.
 
 **Requirement:** `node` must be on the integrated-terminal PATH (the `project`/`map`
 commands run a bundled Node CLI). `login`/`logout` route to the extension via a

@@ -5,17 +5,21 @@ import * as os from 'node:os';
 import * as path from 'node:path';
 import { writeCursorCommands } from '../../src/core/cursorCommands';
 
-test('writeCursorCommands writes all five command files with the bundled cli path', () => {
+test('writeCursorCommands writes all command files with the bundled cli path', () => {
   const home = fs.mkdtempSync(path.join(os.tmpdir(), 'arcus-home-'));
   const prev = process.env.HOME; process.env.HOME = home;
   try {
     writeCursorCommands('/opt/ext');
     const dir = path.join(home, '.cursor', 'commands');
     const names = fs.readdirSync(dir).sort();
-    assert.deepEqual(names, ['arcus-help.md', 'arcus-login.md', 'arcus-logout.md', 'arcus-map.md', 'arcus-project.md']);
+    assert.deepEqual(names, ['arcus-help.md', 'arcus-login.md', 'arcus-logout.md', 'arcus-map.md', 'arcus-project.md', 'arcus-push.md', 'arcus-test.md']);
     assert.match(fs.readFileSync(path.join(dir, 'arcus-login.md'), 'utf8'), /node "\/opt\/ext\/dist\/cli\.js" login/);
     assert.match(fs.readFileSync(path.join(dir, 'arcus-logout.md'), 'utf8'), /node "\/opt\/ext\/dist\/cli\.js" logout/);
     assert.match(fs.readFileSync(path.join(dir, 'arcus-project.md'), 'utf8'), /node "\/opt\/ext\/dist\/cli\.js" project/);
     assert.match(fs.readFileSync(path.join(dir, 'arcus-map.md'), 'utf8'), /node "\/opt\/ext\/dist\/cli\.js" map ticket/);
+    // arcus-test drives the external testsigma CLI; arcus-push preflights via the bundled cli.
+    assert.match(fs.readFileSync(path.join(dir, 'arcus-test.md'), 'utf8'), /testsigma code validate/);
+    assert.match(fs.readFileSync(path.join(dir, 'arcus-push.md'), 'utf8'), /node "\/opt\/ext\/dist\/cli\.js" project current/);
+    assert.match(fs.readFileSync(path.join(dir, 'arcus-push.md'), 'utf8'), /testsigma code push/);
   } finally { process.env.HOME = prev; fs.rmSync(home, { recursive: true, force: true }); }
 });
