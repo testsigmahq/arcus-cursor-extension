@@ -4,6 +4,7 @@
   "description": "Exploratory testing for your code changes. Track edits, generate test plans, run tests in the cloud or locally.",
   "version": "0.1.0",
   "publisher": "testsigma",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/testsigmahq/arcus-cursor-extension"
@@ -36,12 +37,12 @@
       "properties": {
         "arcus.serverUrl": {
           "type": "string",
-          "default": "https://tms-staging.testsigma.com",
+          "default": "https://arcus.testsigma.com",
           "description": "Arcus agentic/auth server URL (browser sign-in, token exchange & refresh)"
         },
         "arcus.apiServerUrl": {
           "type": "string",
-          "default": "https://agentic-test-staging.testsigma.com",
+          "default": "https://agentic-test.testsigma.com",
           "description": "Arcus API server URL (receives hook/context events)"
         },
         "arcus.eventsPath": {
@@ -80,9 +81,9 @@
     "@types/vscode": "^1.85.0",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",
-    "@vscode/vsce": "^2.22.0",
-    "esbuild": "^0.19.0",
-    "eslint": "^9.0.0",
+    "@vscode/vsce": "^3.9.2",
+    "esbuild": "^0.28.1",
+    "eslint": "^10.8.0",
     "tsx": "^4.19.0",
     "typescript": "^5.3.0"
   }

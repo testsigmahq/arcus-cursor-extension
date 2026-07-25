@@ -27,6 +27,7 @@ Thumbs.db
 
 # Local agent config (Claude Code) — personal, machine-specific
 .claude/
+.serena/
 
 # Env / secrets
 .env
