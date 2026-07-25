@@ -10,8 +10,8 @@ import { CmdResult } from './project';
 
 // Defaults mirror src/config/settings.ts so a CLI sign-in lands on the same
 // servers the Cursor extension uses. Env vars override for non-default deployments.
-const DEFAULT_AUTH_SERVER = 'http://dev-tms.testsigma.com';
-const DEFAULT_API_SERVER = 'http://localhost:8000';
+const DEFAULT_AUTH_SERVER = 'https://arcus.testsigma.com';
+const DEFAULT_API_SERVER = 'https://agentic-test.testsigma.com';
 
 export interface LoginDeps {
   authServer: string;

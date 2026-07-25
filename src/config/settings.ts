@@ -1,11 +1,11 @@
 import * as vscode from 'vscode';
 
 export function getServerUrl(): string {
-  return vscode.workspace.getConfiguration('arcus').get<string>('serverUrl', 'https://tms-staging.testsigma.com');
+  return vscode.workspace.getConfiguration('arcus').get<string>('serverUrl', 'https://arcus.testsigma.com');
 }
 
 export function getApiServerUrl(): string {
-  return vscode.workspace.getConfiguration('arcus').get<string>('apiServerUrl', 'https://agentic-test-staging.testsigma.com');
+  return vscode.workspace.getConfiguration('arcus').get<string>('apiServerUrl', 'https://agentic-test.testsigma.com');
 }
 
 export function getEventsPath(): string {

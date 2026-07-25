@@ -52,7 +52,7 @@ function postCallback(authorizeUrl: string): void {
 }
 
 test('cliLogin runs the SSO flow and writes the shared store', withHome(async home => {
-  const token = jwt({ account_id: 'acc-1', user_id: 'usr-1', email: 'dev@testsigma.com' });
+  const token = jwt({ account_id: 'acc-1', user_id: 'usr-1', email: 'dev@example.com' });
   const srv = await tokenServer({ access_token: token, refresh_token: 'refresh-1', expires_in: 3600 });
   try {
     const out: string[] = []; const err: string[] = [];
@@ -66,13 +66,13 @@ test('cliLogin runs the SSO flow and writes the shared store', withHome(async ho
     res.out.forEach(s => out.push(s)); res.err.forEach(s => err.push(s));
 
     assert.equal(res.code, 0);
-    assert.match(res.out.join('\n'), /dev@testsigma\.com/);
+    assert.match(res.out.join('\n'), /dev@example\.com/);
 
     const cfg = JSON.parse(fs.readFileSync(path.join(home, '.arcus', 'config.json'), 'utf8'));
     assert.equal(cfg.auth_status, 'ok');
     assert.equal(cfg.account_id, 'acc-1');
     assert.equal(cfg.user_id, 'usr-1');
-    assert.equal(cfg.user_email, 'dev@testsigma.com');
+    assert.equal(cfg.user_email, 'dev@example.com');
     assert.equal(cfg.api_server, 'http://api.local');
     assert.equal(cfg.auth_server, srv.url);
     assert.equal(cfg.access_token, token);
