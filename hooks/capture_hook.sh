@@ -7,7 +7,8 @@ if [[ -f "$CONFIG_FILE" ]]; then
   source "$CONFIG_FILE"
 fi
 
-SERVER_URL="${ARCUS_SERVER_URL:-http://localhost:8000}"
+# Fallback for a legacy config missing this key — must not be a local address.
+SERVER_URL="${ARCUS_SERVER_URL:-https://agentic-test.testsigma.com}"
 API_KEY="${ARCUS_ACCESS_TOKEN:-}"
 ACCOUNT_ID="${ARCUS_ACCOUNT_ID:-}"
 ENDPOINT="${SERVER_URL}/api/v1/plugin/events"
