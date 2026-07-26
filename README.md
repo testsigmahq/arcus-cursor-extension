@@ -1,14 +1,46 @@
-# Vibetest for Cursor
+# Arcus for Cursor
 
-Exploratory testing for your code changes. Tracks file edits, generates test plans, and runs them in the cloud or locally — all from inside Cursor.
+Capture Cursor session context (file edits, git signals, hook events) and ingest
+it into Arcus. Sessions are grouped by git branch and linked to an Arcus
+workflow; you pick the project and map tickets — all from inside Cursor.
 
 ---
 
-## Requirements
+## Install
 
-- Node.js 18+ (dev only — end users need nothing)
-- npm 9+
-- Cursor or VS Code 1.85+
+Install **Arcus** from the VS Code Marketplace, or from a `.vsix`:
+
+```bash
+cursor --install-extension arcus-1.0.0.vsix
+```
+
+In Cursor: **Extensions → `...` → Install from VSIX**.
+
+Requires Cursor or VS Code 1.85+. `node` must be on the integrated-terminal
+`PATH` — the `project` and `map` commands run a bundled Node CLI.
+
+## Usage
+
+1. `Cmd+Shift+P` → **Arcus: Sign In** → completes browser SSO
+2. `/arcus-project use <id>` → pin the Arcus project
+3. Work as usual — file saves and hook events are captured and ingested
+4. `/arcus-map ticket <KEY>` → link the session's workflow to a ticket
+
+Sign out any time with **Arcus: Sign Out**, which clears local credentials.
+
+## Configuration
+
+Open Settings (`Cmd+,`) → search `arcus`:
+
+| Setting | Default | Purpose |
+|---|---|---|
+| `arcus.serverUrl` | `https://arcus.testsigma.com` | Browser sign-in, token exchange & refresh |
+| `arcus.apiServerUrl` | `https://agentic-test.testsigma.com` | Receives hook/context events |
+| `arcus.eventsPath` | `/api/v1/plugin/events` | Path on the API server accepting hook events |
+| `arcus.logLevel` | `info` | `off` / `error` / `info` / `debug` |
+
+Credentials are stored in the OS keychain plus a `0600` config file; there is no
+plaintext token on disk. Logs go to **Output panel → Arcus**.
 
 ---
 
@@ -21,6 +53,8 @@ git clone https://github.com/testsigmahq/arcus-cursor-extension
 cd arcus-cursor-extension
 npm install
 ```
+
+Requires Node.js 18+ and npm 9+ (contributors only).
 
 ### Build
 
@@ -42,38 +76,19 @@ Uses ESLint v9 with flat config (`eslint.config.js`) and `@typescript-eslint` ru
 
 ---
 
-## Local Testing
-
-### Option A — Extension Development Host (recommended during dev)
+### Run from source
 
 1. Open the `arcus-cursor-extension` folder in Cursor or VS Code
-2. Press `F5` — launches a new **Extension Development Host** window with the extension loaded
+2. Press `F5` — launches an **Extension Development Host** window with the extension loaded
 3. Edit source → `Ctrl+Shift+P` → **Developer: Reload Window** to pick up changes
-4. Use `npm run watch` in a terminal so rebuilds happen automatically on save
+4. Run `npm run watch` so rebuilds happen on save
 
-### Option B — Install the VSIX directly
+### Test
 
 ```bash
-npm run package
-cursor --install-extension vibetest-0.1.0.vsix
+npm test
+bash hooks/capture_hook.test.sh
 ```
-
-Or in Cursor: **Extensions → `...` → Install from VSIX** → pick the `.vsix` file.
-
-### First-run configuration
-
-1. `Cmd+Shift+P` → **Vibetest: Set API Key** → enter your key
-2. Open Settings (`Cmd+,`) → search `vibetest`:
-   - `vibetest.serverUrl` — default `http://localhost:8800`
-   - `vibetest.eventsPath` — default `/api/v1/plugin/events`
-3. Save any file → status bar shows `⚗ Vibetest (1)`
-4. `Cmd+Shift+P` → **Vibetest: Run Tests** → enter target URL
-
-### Viewing logs
-
-**Output panel → Vibetest** — all debug/info/error logs appear here.
-
-Control verbosity via `vibetest.logLevel` setting: `off` / `error` / `info` / `debug`.
 
 ---
 
@@ -81,13 +96,11 @@ Control verbosity via `vibetest.logLevel` setting: `off` / `error` / `info` / `d
 
 ### Prerequisites
 
-1. Create a publisher account at [marketplace.visualstudio.com](https://marketplace.visualstudio.com)
-2. Publisher ID must match `"publisher"` in `package.json` (currently `testsigma`)
-3. Generate a Personal Access Token (PAT):
-   - Go to `dev.azure.com` → User Settings → Personal Access Tokens
+1. Publisher account at [marketplace.visualstudio.com](https://marketplace.visualstudio.com)
+2. Publisher ID must match `"publisher"` in `package.json` (`testsigma`)
+3. Personal Access Token (PAT):
+   - `dev.azure.com` → User Settings → Personal Access Tokens
    - Scope: **Marketplace → Manage**
-4. Add a real 128×128 PNG as `assets/icon.png`
-5. Add a `LICENSE` file
 
 ### Publish
 
@@ -95,7 +108,7 @@ Control verbosity via `vibetest.logLevel` setting: `off` / `error` / `info` / `d
 npm install -g @vscode/vsce   # if not already installed globally
 
 vsce login testsigma          # paste your PAT when prompted
-npm run package               # builds vibetest-x.x.x.vsix
+npm run package               # builds arcus-x.x.x.vsix
 vsce publish                  # pushes to VS Code Marketplace
 ```
 
@@ -105,7 +118,7 @@ Cursor reads from the VS Code Marketplace — no separate submission needed.
 
 ```bash
 npm install -g ovsx
-ovsx publish vibetest-0.1.0.vsix -p <open-vsx-token>
+ovsx publish arcus-1.0.0.vsix -p <open-vsx-token>
 ```
 
 ### Bumping versions
@@ -114,8 +127,8 @@ Update `version` in `package.json` before each publish. Follow semver:
 
 | Change | Version bump |
 |--------|-------------|
-| Bug fix | PATCH `0.1.x` |
-| New feature | MINOR `0.x.0` |
+| Bug fix | PATCH `1.0.x` |
+| New feature | MINOR `1.x.0` |
 | Breaking change | MAJOR `x.0.0` |
 
 Or let vsce handle it:
@@ -142,12 +155,10 @@ src/
 │   └── logger.ts         # output channel logger
 ├── api/
 │   ├── client.ts         # base HTTP client (no external deps)
-│   └── events.ts         # post hook events to Vibetest backend
+│   └── events.ts         # post hook events to Arcus backend
 ├── commands/
-│   ├── runTests.ts       # Vibetest: Run Tests
-│   ├── showReport.ts     # Vibetest: Show Last Report
-│   ├── setApiKey.ts      # Vibetest: Set API Key
-│   └── clearSession.ts   # Vibetest: Clear Session
+│   ├── signIn.ts         # Arcus: Sign In
+│   └── signOut.ts        # Arcus: Sign Out
 └── ui/
     ├── reportPanel.ts    # webview panel for test reports
     └── statusBar.ts      # status bar item
@@ -159,10 +170,8 @@ src/
 
 | Command | Description |
 |---------|-------------|
-| `Vibetest: Run Tests` | Generate test plan and run against target URL |
-| `Vibetest: Show Last Report` | Re-open report from last run |
-| `Vibetest: Set API Key` | Store API key in OS keychain |
-| `Vibetest: Clear Session` | Reset change log and start fresh session |
+| `Arcus: Sign In` | Sign in to Arcus via browser SSO |
+| `Arcus: Sign Out` | Clear local credentials |
 
 ---
 
@@ -174,7 +183,7 @@ The extension provisions these commands into `~/.cursor/commands/` on activation
 |---|---|
 | `/arcus-login` | Sign in via browser SSO (opens through the extension) |
 | `/arcus-logout` | Clear local credentials |
-| `/arcus-project list [search]` | List Testsigma projects |
+| `/arcus-project list [search]` | List Arcus projects |
 | `/arcus-project use <id>` | Pin the active project |
 | `/arcus-project current` | Show the pinned project |
 | `/arcus-map ticket <KEY>` | Map a ticket to the current session's workflow |

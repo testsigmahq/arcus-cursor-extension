@@ -9,7 +9,7 @@ dist/
 *.vsix
 
 # Runtime session data
-.vibetest/
+.arcus/
 
 # Design docs / plans — local only, not part of the repo
 docs/

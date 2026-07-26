@@ -1,8 +1,8 @@
 {
   "name": "arcus",
   "displayName": "Arcus",
-  "description": "Exploratory testing for your code changes. Track edits, generate test plans, run tests in the cloud or locally.",
-  "version": "0.1.0",
+  "description": "Capture Cursor session context for Arcus — SSO auth, project pinning, ticket mapping.",
+  "version": "1.0.0",
   "publisher": "testsigma",
   "license": "MIT",
   "repository": {
