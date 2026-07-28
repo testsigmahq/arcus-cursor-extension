@@ -3,6 +3,8 @@ tests/**
 docs/**
 .claude/**
 .cursor/**
+.serena/**
+dist/**/*.map
 hooks/*.test.sh
 .gitignore
 .github/**
