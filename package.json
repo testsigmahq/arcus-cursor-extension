@@ -2,7 +2,7 @@
   "name": "arcus",
   "displayName": "Arcus",
   "description": "Capture Cursor session context for Arcus — SSO auth, project pinning, ticket mapping.",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "publisher": "testsigma",
   "license": "MIT",
   "repository": {
@@ -71,6 +71,7 @@
     "package": "npm run build:prod && vsce package --no-dependencies",
     "deploy": "npm version patch --no-git-tag-version && npm run package && cursor --install-extension arcus-$(node -p \"require('./package.json').version\").vsix",
     "lint": "eslint src tests",
+    "sync-skills": "node scripts/sync-skills.mjs",
     "test": "tsx --test 'tests/**/*.test.ts'",
     "clean": "rm -rf dist *.vsix node_modules package-lock.json",
     "startover": "npm run clean && npm install && npm run deploy",
