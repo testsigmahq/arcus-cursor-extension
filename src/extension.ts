@@ -6,6 +6,7 @@ import { ChangeTracker } from './core/changeTracker';
 import { EventsClient } from './api/events';
 import { logger } from './core/logger';
 import { writeHookConfig, writeCursorCommands } from './core/configWriter';
+import { writeCursorSkills } from './core/cursorSkills';
 import { AuthManager } from './auth/authManager';
 import { readSharedConfig } from './auth/sharedConfig';
 import { SharedStoreWatcher } from './auth/sharedStoreWatcher';
@@ -46,6 +47,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 
   await writeHookConfig(context);
   writeCursorCommands(context.extensionPath);
+  writeCursorSkills(context.extensionPath);
   vscode.workspace.onDidChangeConfiguration(e => {
     if (e.affectsConfiguration('arcus')) {
       writeHookConfig(context);

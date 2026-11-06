@@ -28,6 +28,27 @@ Requires Cursor or VS Code 1.85+. `node` must be on the integrated-terminal
 
 Sign out any time with **Arcus: Sign Out**, which clears local credentials.
 
+## Write, run and push Arcus tests
+
+The extension installs four skills into `~/.cursor/skills`. They need the `arcus` CLI
+(`npm i -g @testsigma/arcus-cli`, version 0.1.3 or newer). Ask in plain words, or type the name in the agent chat:
+
+| Skill | What it does |
+|---|---|
+| `/arcus-setup` | Checks the CLI, your sign-in, the project, and whether this computer can run tests |
+| `/arcus-author` | Writes a test as a `.sigma` file and checks it with `arcus check` |
+| `/arcus-run` | Runs one web test in a browser on this computer, reads the result and the screenshot, and says whether the test, the app or the setup is wrong |
+| `/arcus-push` | Shows which Arcus project and folder a push goes to, waits for your yes, then pushes and gives a link to each test |
+
+`arcus auth login` (the CLI) is a separate sign-in from **Arcus: Sign In** (session capture). Session capture is
+unchanged: it keeps running in the background while you use these skills.
+
+The skills are generated from the Arcus Claude plugin. To update them:
+
+```bash
+npm run sync-skills -- <path to arcus-claude-plugin>/plugins/arcus
+```
+
 ## Configuration
 
 Open Settings (`Cmd+,`) → search `arcus`:
